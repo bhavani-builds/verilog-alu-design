@@ -1,0 +1,33 @@
+name: Verilog ALU Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  simulation:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog
+
+      - name: Compile ALU
+        run: |
+          iverilog -o alu_sim \
+            src/alu_4bit.v \
+            tb/tb_alu_4bit.v
+
+      - name: Run ALU simulation
+        run: |
+          vvp alu_sim
